@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//First ebtitie
+model User {
+  id        String   @id @default(uuid()) //@ID= PRIMARY KEY
+  email     String   @unique //unique
+  role      Role     @default(USER)
+  image     String? //the question mark means optional
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookmarks Link[] //array of links 
+}
+
+//Role is a set of values
+enum Role {
+  ADMIN
+  USER
+}
+
+//Defining the model Link
+model Link {
+  id          String   @id @default(uuid())
+  title       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
+  url         String
+  imageUrl    String
+  category    String
+  userId      String?
+  users       User[] //Links will have as many users as users links
+}
+
+// In posgressQl we have enum which means different options
